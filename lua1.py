@@ -993,7 +993,7 @@ def like_handler(message: Message):
 
     reply_text += (
         "────────────────────\n"
-        "🔗 <b>ode by vLongzZ </b> @vanlongvippro\n"
+        "🔗 <b>ode by modvip </b> @nullexe98\n"
         "</blockquote>"
     )
 
