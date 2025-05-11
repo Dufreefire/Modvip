@@ -19,7 +19,6 @@ from telebot import types
 from time import strftime
 import queue
 import pytz
-import psutil
 admin_diggory = "nullexe98" 
 name_bot = "Modvipgame Bot"
 zalo = "null"
