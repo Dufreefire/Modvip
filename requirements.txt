@@ -2,4 +2,4 @@ pyTelegramBotAPI
 requests
 gTTS
 pytz
-UptimeRobot
+psutil
