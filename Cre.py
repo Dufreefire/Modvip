@@ -1440,7 +1440,7 @@ def like_handler(message: Message):
         return  
 
     idgame = command_parts[1]  
-    urllike = f"https://scromnyi.onrender.com/like?={uid}&region={region}"  
+    urllike = f"https://scromnyi.onrender.com/like?uid={idgame}&region={region}"  
 
     def safe_get(data, key):
         value = data.get(key)
