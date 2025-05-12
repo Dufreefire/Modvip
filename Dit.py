@@ -1438,7 +1438,8 @@ def like_handler(message: Message):
     if len(command_parts) != 2:  
         bot.reply_to(message, "<blockquote>maxlikes 1733997441</blockquote>", parse_mode="HTML")  
         return  
-
+        
+    region = "VN"
     idgame = command_parts[1]  
     urllike = f"https://scromnyi.onrender.com/like?uid={idgame}&region={region}"  
 
