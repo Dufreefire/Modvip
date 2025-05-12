@@ -1412,83 +1412,76 @@ def checkban_user(message):
         )
 
  ####
-# dict lưu user_id và thời gian cuối cùng gọi lệnh
-user_last_like_time = {}
+import os
+import datetime
+import requests
+from telebot import TeleBot
+from telebot.types import Message
 
-# thời gian chờ (giây)
-LIKE_COOLDOWN = 60
 
 
-@bot.message_handler(commands=['maxlikes'])
+@bot.message_handler(commands=['like'])
 def like_handler(message: Message):
     user_id = message.from_user.id
-    current_time = time.time()
+    today_day = datetime.date.today().day
+    key_path = f"./user/{today_day}/{user_id}.txt"
 
-    last_time = user_last_like_time.get(user_id, 0)
-    time_diff = current_time - last_time
-
-    if time_diff < LIKE_COOLDOWN:
-        wait_time = int(LIKE_COOLDOWN - time_diff)
-        bot.reply_to(message, f"<blockquote>⏳ Vui lòng chờ {wait_time} giây trước khi dùng lại lệnh này.</blockquote>", parse_mode="HTML")
+    if user_id not in allowed_users and not os.path.exists(key_path):
+        bot.reply_to(
+            message,
+            "<blockquote>⚠️ Bạn chưa nhập key! ⚠️\nDùng /getkey hoặc /muavip để sử dụng.</blockquote>",
+            parse_mode="HTML"
+        )
         return
 
-    user_last_like_time[user_id] = current_time  # cập nhật thời gian sử dụng
-
-    command_parts = message.text.split()  
-    if len(command_parts) != 2:  
-        bot.reply_to(message, "<blockquote>maxlikes 1733997441</blockquote>", parse_mode="HTML")  
-        return  
-        
+    command_parts = message.text.split()
+    if len(command_parts) != 2:
+        bot.reply_to(message, "<blockquote>/newlike 1733997441</blockquote>", parse_mode="HTML")
+        return
     region = "VN"
-    idgame = command_parts[1]  
-    urllike = f"https://scromnyi.onrender.com/like?uid={idgame}&region={region}"  
+    idgame = command_parts[1]
+    url = f"https://scromnyi.onrender.com/like?uid={uid}&region={region}"
 
     def safe_get(data, key):
         value = data.get(key)
-        return value if value not in [None, ""] else "Không xác định"
-
-    def extract_number(text):
-        if not text:
-            return "Không xác định"
-        for part in text.split():
-            if part.isdigit():
-                return part
-        return "Không xác định"
-
-    loading_msg = bot.reply_to(message, "<blockquote>⏳ Đang tiến hành buff like...</blockquote>", parse_mode="HTML")
+        return value if value not in [None, "", 0] else "Không xác định"
 
     try:
-        response = requests.get(urllike, timeout=15)
+        response = requests.get(url, timeout=15)
         response.raise_for_status()
         data = response.json()
     except requests.exceptions.RequestException:
-        bot.edit_message_text("<blockquote>Server đang quá tải, vui lòng thử lại sau.</blockquote>",
-                              chat_id=loading_msg.chat.id, message_id=loading_msg.message_id, parse_mode="HTML")
+        bot.reply_to(message, "<blockquote>⚠️ Server đang quá tải, vui lòng thử lại sau.</blockquote>", parse_mode="HTML")
         return
     except ValueError:
-        bot.edit_message_text("<blockquote>Phản hồi từ server không hợp lệ.</blockquote>",
-                              chat_id=loading_msg.chat.id, message_id=loading_msg.message_id, parse_mode="HTML")
+        bot.reply_to(message, "<blockquote>⚠️ Phản hồi từ server không hợp lệ.</blockquote>", parse_mode="HTML")
         return
 
-    status_code = data.get("status")
+    status = data.get("status")
+
+    if status not in [1, 2]:
+        bot.reply_to(message, "<blockquote>⚠️ Thao tác không thành công, vui lòng thử lại sau.</blockquote>", parse_mode="HTML")
+        return
 
     reply_text = (
-        "<blockquote>"
-        "BUFF LIKE THÀNH CÔNG✅\n"
-        f"╭👤 Name: {safe_get(data, 'PlayerNickname')}\n"
-        f"├🆔 UID : {safe_get(data, 'uid')}\n"
-        f"├🌏 Region : vn\n"
-        f"├📉 Like trước đó: {safe_get(data, 'likes_before')}\n"
-        f"├📈 Like sau khi gửi: {safe_get(data, 'likes_after')}\n"
-        f"╰👍 Like được gửi: {extract_number(data.get('likes_given'))}"
+        f"<blockquote>\n"
+        f"👤 <b>Tên:</b> {safe_get(data, 'PlayerNickname')}\n"
+        f"🆔 <b>UID:</b> {safe_get(data, 'UID')}\n"
+        f"👍 <b>Like trước:</b> {safe_get(data, 'LikesbeforeCommand')}\n"
+        f"✅ <b>Like sau:</b> {safe_get(data, 'LikesafterCommand')}\n"
+        f"➕ <b>Số like buff:</b> {safe_get(data, 'LikesGivenByAPI')}\n"
     )
 
-    if status_code == 2:
-        reply_text += "\n⚠️ Giới hạn like hôm nay, mai hãy thử lại sau."
+    if status == 2:
+        reply_text += "⚠️ <b>Thông báo:</b> Bạn đã buff tối đa trong ngày hôm nay!\n"
 
-    reply_text += "</blockquote>"
+    reply_text += (
+        "────────────────────\n"
+        "🔗 <b>ode by modvip </b> @nullexe98\n"
+        "</blockquote>"
+    )
 
-    bot.edit_message_text(reply_text, chat_id=loading_msg.chat.id, message_id=loading_msg.message_id, parse_mode="HTML")
+    bot.reply_to(message, reply_text, parse_mode="HTML")
 
 ###
 
