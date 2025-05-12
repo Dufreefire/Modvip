@@ -1412,7 +1412,7 @@ def checkban_user(message):
         )
 
  ####
-@bot.message_handler(commands=['like'])
+@bot.message_handler(commands=['maxlikes'])
 def like_handler(message: Message):
     user_id = message.from_user.id
     current_time = time.time()
@@ -1429,7 +1429,7 @@ def like_handler(message: Message):
 
     command_parts = message.text.split()  
     if len(command_parts) != 2:  
-        bot.reply_to(message, "<blockquote>like 1733997441</blockquote>", parse_mode="HTML")  
+        bot.reply_to(message, "<blockquote>maxlikes 1733997441</blockquote>", parse_mode="HTML")  
         return  
 
     idgame = command_parts[1]  
