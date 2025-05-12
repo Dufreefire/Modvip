@@ -1420,8 +1420,8 @@ from telebot.types import Message
 
 
 
-@bot.message_handler(commands=['like'])
-def like_handler(message: Message):
+@bot.message_handler(commands=['newlike'])
+def newlike_handler(message: Message):
     user_id = message.from_user.id
     today_day = datetime.date.today().day
     key_path = f"./user/{today_day}/{user_id}.txt"
