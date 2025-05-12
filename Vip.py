@@ -1412,6 +1412,13 @@ def checkban_user(message):
         )
 
  ####
+# dict lưu user_id và thời gian cuối cùng gọi lệnh
+user_last_like_time = {}
+
+# thời gian chờ (giây)
+LIKE_COOLDOWN = 60
+
+
 @bot.message_handler(commands=['maxlikes'])
 def like_handler(message: Message):
     user_id = message.from_user.id
