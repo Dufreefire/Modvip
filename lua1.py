@@ -25,7 +25,7 @@ zalo = "null"
 web = "null/"
 facebook = "no"
 #allowed_group_id = -1002311654677
-allowed_group_id = [-1002574740466, -1002201340697]
+allowed_group_id = [-1002574740466, -1002520730327]
 bot=telebot.TeleBot("8122746410:AAGb_M1aUu1K4fdOnKAR71GDcs1vg2kqroc") 
 #real :AAEPdyxq7Hq1YQHEVG_NPyfWtt8eT1Ibpe8
 #phu 7602622138:AAEY_M2FDQd1JuAI7z05MBvcvW7QDfZ86V0
