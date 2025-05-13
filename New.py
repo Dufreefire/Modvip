@@ -362,7 +362,7 @@ def startkey(message):
 
         if 'shortenedUrl' in url_data:
             url_key = url_data['shortenedUrl']
-            text = (f'Link Lấy Key Ngày {TimeStamp()} LÀ:https://yeumoney.com/p3e5 {url_key}\n'
+            text = (f'Link Lấy Key Ngày {TimeStamp()} LÀ:https://yeumoney.com/zgupCxkDN'
                     'KHI LẤY KEY XONG, DÙNG LỆNH /key Modvip... ĐỂ TIẾP TỤC Hoặc /muavip đỡ vượt tốn thời gian nhé')
             bot.reply_to(message, text)
         else:
